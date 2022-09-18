@@ -2,24 +2,15 @@ extends layout
 
 block content
   .page-header
-    h3 Contact Form
+    h3 Contact
 
-  form.form-horizontal(role='form', method='POST')
-    input(type='hidden', name='_csrf', value=_csrf)
-    .form-group
-      label(class='col-sm-2 control-label', for='name') Name
-      .col-sm-8
-        input.form-control(type='text', name='name', id='name', autofocus=true)
-    .form-group
-      label(class='col-sm-2 control-label', for='email') Email
-      .col-sm-8
-        input.form-control(type='text', name='email', id='email')
-    .form-group
-      label(class='col-sm-2 control-label', for='message') Body
-      .col-sm-8
-        textarea.form-control(type='text', name='message', id='message', rows='7')
-    .form-group
-      .col-sm-offset-2.col-sm-8
-        button.btn.btn-default(type='submit')
-          i.fa.fa-mail-forward
-          | Send
+  .row
+    .col-sm-4.col-md-4
+        h4 Need help?
+        p Contact <a href="https://www.amypavel.com" target="_blank">Amy Pavel</a> at apavel at cs dot cmu dot edu, or on twitter <a href="https://twitter.com/amypavel" target="_blank">@amypavel</a>
+    .col-sm-4.col-md-4
+        h4 Code
+        p The majority of the interface code was written by <a href="https://people.eecs.berkeley.edu/~cjrd/" target="_blank">Colorado Reed.</a> Fork it on <a href="https://github.com/ucbvislab/vdigests" target="_blank">GitHub.</a>
+    .col-sm-4.col-md-4
+        h4 Paper
+        p For more about this project, check out the original publication, <a href="http://vis.berkeley.edu/papers/videodigests/" target="_blank">"Video Digests: A Browsable, Skimmable Format for Informational Lecture Videos."</a>

@@ -6,27 +6,27 @@
         span.icon-bar
         span.icon-bar
         span.icon-bar
-      a.navbar-brand(href='/videodigests') Video Digests
+      a.navbar-brand(href='/') Video Digests
     .collapse.navbar-collapse
       ul.nav.navbar-nav
-        li(class=title=='Video Digests'?'active':undefined)
-          a(href='/videodigests/vdigests') Video Digest List
+        //- li(class=title=='Video Digests'?'active':undefined)
+        //-   a(href='/latest') Latest
         li(class=title=='Video Digest Creator'?'active':undefined)
-          a(href='/videodigests/editor') Video Digest Creator
+          a(href='/editor') Create
         li(class=title=='Contact'?'active':undefined)
-          a(href='/videodigests/contact') Contact
+          a(href='/contact') Contact
       ul.nav.navbar-nav.navbar-right
         if !user
           li(class=title=='Login'?'active':undefined)
-            a(href='/videodigests/login') Login
+            a(href='/login') Login
           li(class=title=='Create Account'?'active':undefined)
-            a(href='/videodigests/signup') Create Account
+            a(href='/signup') Create Account
         else
           li.dropdown(class=title=='Account Management'?'active':undefined)
             a.dropdown-toggle(href='', data-toggle='dropdown')
-              | #{user.profile.name || user.email || user.id}&nbsp;
+              | #{user.name || user.email || user.id}&nbsp;
               i.caret
             ul.dropdown-menu
-              li: a(href='/videodigests/account') My Account
+              li: a(href='/account') My Account
               li.divider
-              li: a(href='/videodigests/logout') Logout
+              li: a(href='/logout') Logout

@@ -14,30 +14,37 @@ block content
 
   #main-video-wrapper
     //iframe(width="640", height="360", src="//www.youtube.com/embed/fTlPJ7f9VsU9", frameborder="0", allowfullscreen)
-    a(href="http://vis.berkeley.edu/videodigests/view/The-Power-of-Protyping-expert-Q_YIysi")
-      img(src="http://vis.berkeley.edu/papers/videodigests/video-digest-browser.png", width=640, style="margin-")
+    a(href="/view/The-Power-of-Protyping-expert-Q_YIysi")
+      img(src="#{assetPath('video-digest-browser.png')}", width=640, style="margin-")
 
   #read-the-paper
-    .paper-icon
-      a(href="http://vis.berkeley.edu/papers/videodigests/")
-        img(src="http://192.241.199.43/img/paper.png")
     .paper-details
         h3
           a(href="http://vis.berkeley.edu/papers/videodigests/") Video Digests: A Browsable, Skimmable Format for Informational Lecture Videos
-        p.authors Amy Pavel, Colorado Reed, Bjoern Hartmann, Maneesh Agrawala
-        p.conference UIST 2014, October 2014
+        p.authors 
+          a(href="https://www.amypavel.com") Amy Pavel
+          | , 
+          a(href="https://people.eecs.berkeley.edu/~cjrd/") Colorado Reed
+          | , 
+          a(href="http://people.eecs.berkeley.edu/~bjoern/") Bjoern Hartmann
+          | , 
+          a(href="http://graphics.stanford.edu/~maneesh/") Maneesh Agrawala
+        p.conference UIST 2014, October 2014. 
+        p
+          a(href="https://github.com/ucbvislab/vdigests") Code on GitHub
 
 
   #build-vd
     h3 Create a Video Digest
     ol
       li 
-        a(href="http://vis.berkeley.edu/videodigests/signup") Create an account
-        |   (contact [colorado at berkeley d0t edu] for beta access code)
+        a(href="/signup") Create an account
+        |   (contact Amy [apavel at cs dot cmu dot edu] for the beta access code)
       li
-        a(href="http://vis.berkeley.edu/videodigests/editor") Upload video/transcript
-      li After the video/transcript has processed, you will receive an email with a link to the video digest creator
+        a(href="/editor") Add a YouTube video url, which will bring you to the editor
       li Once finished editing the video digest, you can publish the results and share the link
+      li
+        a(href="/tutorial") Check out a full tutorial here.
   #landing-description 
   #study-results
     .res-list-wrapper
@@ -45,69 +52,86 @@ block content
         ul.res-list
           li
             .res-thumb-wrap
-              img.thumb(src="http://192.241.199.43/img/hans-thumb.jpeg")
+              img.thumb(src="#{assetPath('algbias-thumb.png')}")
             .res-script-wrap
-                h3 The Best Stats You've Ever Seen
-                h3.vdauthor Hans Rosling
-                p.vresult
-                  a(href="/videodigests/view/The-Best-Stats-Youve-Ever-Seen-expert-KaZP9x9") expert video digest  
-                  //- |  |  
-                  //- a(href="/videodigests/editor#edit/KaZP9x9") edit
-                p.vresult
-                  a(href="/videodigests/view/The-best-stats-youve-ever-seen-crowdsourced-xuTl2DM") auto-generated video digest
-                  //- |  |  
-                  //- a(href="/videodigests/editor#edit/xuTl2DM") edit
+                h3 
+                  a(href="/view/O1bbVhfk/How-Im-fighting-bias-in-algorithms-or-Joy-Buolamwini") How I'm Fighting Bias in Algorithms
+                h3.vdauthor Joy Boulamwini
           .clearfix
           li
             .res-thumb-wrap
-              img.thumb(src="http://192.241.199.43/img/sk-thumb.jpeg")
+              img.thumb(src="#{assetPath('whatiscomputation.png')}")
             .res-script-wrap
-                h3 The Power of Prototyping
-                h3.vdauthor Scott Klemmer
-                p.vresult
-                    a(href="/videodigests/view/The-Power-of-Protyping-expert-Q_YIysi") expert video digest
-                    //- |  |  
-                    //- a(href="/videodigests/editor#edit/Q_YIysi") edit
-                p.vresult
-                    a(href="/videodigests/view/The-Power-of-Protyping-crowdsourced-xBkN85s") auto-generated video digest
-                    //- |  |  
-                    //- a(href="/videodigests/editor#edit/xBkN85s") edit
-          .clearfix 
-          li
-            .res-thumb-wrap
-              img.thumb(src="http://192.241.199.43/img/khan-thumb.jpeg")
-            .res-script-wrap
-                h3 U.S. History Overview 1 - Jamestown to the Civil War
-                h3.vdauthor Sal Khan
-                p.vresult
-                    a(href="/videodigests/view/US-History-Overview-1-Jamestown-to-the-Civil-War-expert-8c3ivNX") expert video digest
-                    //- |  |  
-                    //- a(href="/videodigests/editor#edit/8c3ivNX") edit
-                p.vresult
-                    a(href="/videodigests/view/US-History-Overview-1-Jamestown-to-the-Civil-War-crowdsourced-6zUmluC") auto-generated video digest
-                    //- |  |  
-                    //- a(href="/videodigests/editor#edit/6zUmluC") edit
-           .clearfix 
-          li
-            .res-thumb-wrap
-              img.thumb(src="http://192.241.199.43/img/tom-thumb.jpeg")
-            .res-script-wrap
-                h3 Five Principles for Choosing Research Problems in Computer Graphics
-                h3.vdauthor Thomas Funkhouser
-                p.vresult
-                    a(href="/videodigests/view/Five-Principles-for-Choosing-Research-Problems-in-Computer-Graphics-oTY3zBL") expert video digest
-                    //- |  |  
-                    //- a(href="/videodigests/editor#edit/8c3ivNX") edit
-                p.vresult
-           .clearfix 
-          li
-            .res-thumb-wrap
-              img.thumb(src="http://192.241.199.43/img/sam_idea.jpeg")
-            .res-script-wrap
-                h3 How to Start a Startup
-                h3.vdauthor Sam Altman
-                p.vresult
-                    a(href="/videodigests/view/Lecture-1-How-to-Start-a-Startup-FuX-7RX") expert video digest
-           .clearfix 
+                h3 
+                  a(href="/view/KJB5jb-5u/1-What-is-Computation") MIT 6.0001: What is Computation?
+                h3.vdauthor Ana Bell
+          .clearfix
+        //- ul.res-list
+        //-   li
+        //-     .res-thumb-wrap
+        //-       img.thumb(src="#{assetPath('hans-thumb.jpeg')}")
+        //-     .res-script-wrap
+        //-         h3 The Best Stats You've Ever Seen
+        //-         h3.vdauthor Hans Rosling
+        //-         p.vresult
+        //-           a(href="/view/The-Best-Stats-Youve-Ever-Seen-expert-KaZP9x9") expert video digest  
+        //-           //- |  |  
+        //-           //- a(href="/videodigests/editor#edit/KaZP9x9") edit
+        //-         p.vresult
+        //-           a(href="/view/The-best-stats-youve-ever-seen-crowdsourced-xuTl2DM") auto-generated video digest
+        //-           //- |  |  
+        //-           //- a(href="/videodigests/editor#edit/xuTl2DM") edit
+        //-   .clearfix
+        //-   li
+        //-     .res-thumb-wrap
+        //-       img.thumb(src="#{assetPath('sk-thumb.jpeg')}")
+        //-     .res-script-wrap
+        //-         h3 The Power of Prototyping
+        //-         h3.vdauthor Scott Klemmer
+        //-         p.vresult
+        //-             a(href="/view/The-Power-of-Protyping-expert-Q_YIysi") expert video digest
+        //-             //- |  |  
+        //-             //- a(href="/videodigests/editor#edit/Q_YIysi") edit
+        //-         p.vresult
+        //-             a(href="/view/The-Power-of-Protyping-crowdsourced-xBkN85s") auto-generated video digest
+        //-             //- |  |  
+        //-             //- a(href="/videodigests/editor#edit/xBkN85s") edit
+        //-   .clearfix 
+        //-   li
+        //-     .res-thumb-wrap
+        //-       img.thumb(src="#{assetPath('khan-thumb.jpeg')}")
+        //-     .res-script-wrap
+        //-         h3 U.S. History Overview 1 - Jamestown to the Civil War
+        //-         h3.vdauthor Sal Khan
+        //-         p.vresult
+        //-             a(href="/view/US-History-Overview-1-Jamestown-to-the-Civil-War-expert-8c3ivNX") expert video digest
+        //-             //- |  |  
+        //-             //- a(href="/videodigests/editor#edit/8c3ivNX") edit
+        //-         p.vresult
+        //-             a(href="/view/US-History-Overview-1-Jamestown-to-the-Civil-War-crowdsourced-6zUmluC") auto-generated video digest
+        //-             //- |  |  
+        //-             //- a(href="/videodigests/editor#edit/6zUmluC") edit
+        //-    .clearfix 
+        //-   li
+        //-     .res-thumb-wrap
+        //-       img.thumb(src="#{assetPath('tom-thumb.jpeg')}")
+        //-     .res-script-wrap
+        //-         h3 Five Principles for Choosing Research Problems in Computer Graphics
+        //-         h3.vdauthor Thomas Funkhouser
+        //-         p.vresult
+        //-             a(href="/view/Five-Principles-for-Choosing-Research-Problems-in-Computer-Graphics-oTY3zBL") expert video digest
+        //-             //- |  |  
+        //-             //- a(href="/videodigests/editor#edit/8c3ivNX") edit
+        //-         p.vresult
+        //-    .clearfix 
+        //-   li
+        //-     .res-thumb-wrap
+        //-       img.thumb(src="#{assetPath('sam_idea.jpeg')}")
+        //-     .res-script-wrap
+        //-         h3 How to Start a Startup
+        //-         h3.vdauthor Sam Altman
+        //-         p.vresult
+        //-             a(href="/view/Lecture-1-How-to-Start-a-Startup-FuX-7RX") expert video digest
+        //-    .clearfix 
 
   #bg-color-change

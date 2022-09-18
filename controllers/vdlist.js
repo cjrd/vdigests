@@ -1,16 +1,19 @@
-
-var VDigest = require('../models/VDigest');
+const { VDigest } = require('../models/VDigest');
 
 /**
  * GET /contact
  * Contact form page.
  */
-exports.getVDList = function(req, res) {
+exports.getVDList = async function (req, res) {
+  const vds = await VDigest.findAll({
+    where: { pubdisplay: true },
+    attributes: ['id', 'puburl', 'title'],
+    order: [['createdAt', 'DESC']],
+    limit: 20,
+  });
 
-VDigest.find({}, "pubdisplay puburl digest.title", function (err, vds) {
   res.render('vdlist', {
     title: 'Video Digests',
-    vds: vds
+    vds,
   });
-});
 };

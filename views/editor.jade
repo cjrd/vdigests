@@ -2,6 +2,23 @@ extends layout
 block navbar
   include partials/navigation
 
+block modal
+  div(id="modal-1" class="modal micromodal-slide" aria-hidden="true")
+    div(class="modal__overlay" tabindex="-1" data-micromodal-close)
+      div(class="modal__container" role="dialog" aria-modal aria-labelledby="modal-1-title")
+        header(class="modal__header")
+          h2(id="modal-1-title" class="modal__title") Publish
+          button(aria-label="Close modal" class="modal__close" data-micromodal-close)
+        div(id="modal-1-content" class="modal__content")
+          p Make your Video Digest available to the outside world!
+          p
+            input(type="checkbox" id="publish-modal-unlisted")
+            | Unlisted
+        footer(class="modal__footer")
+          button(class="modal__btn modal__btn-primary" id="publish-modal-publish" data-micromodal-close) Publish
+          button(class="modal__btn" id="publish-modal-unpublish" data-micromodal-close) Unpublish
+          button(class="modal__btn" data-micromodal-close aria-label="Close this dialog window") Close
+
 block morecss
   != css("edit-interface")
   != css("jquery.jscrollpane")
@@ -9,7 +26,7 @@ block morecss
 
 block content
   #loading-image
-    img(src="http://192.241.199.43/img/loading.gif")
+    i(class="fas fa-spinner fa-spin")
     |  Loading Video Content
   #editing-interface
   #video-form.first-form
@@ -55,10 +72,10 @@ block content
               | change section keyframe:
             |  navigate video to desired location then press the camera button on the keyframe
 
-
 block morejs
   if (prod)
     != js("lib/require")
-    != js("main-built")
+    != js("main-built.min")
   else
     != js("lib/require", {"data-main": "/js/editing-interface/main.js"})
+

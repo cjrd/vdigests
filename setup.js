@@ -4,10 +4,10 @@ var blessed = require('blessed');
 var multiline = require('multiline');
 
 var screen = blessed.screen({
-  autoPadding: true
+  autoPadding: true,
 });
 
-screen.key('q', function() {
+screen.key('q', function () {
   process.exit(0);
 });
 
@@ -24,8 +24,8 @@ var home = blessed.list({
     '» REMOVE AUTHENTICATION PROVIDER',
     '» CHANGE EMAIL SERVICE',
     '» ADD NODE.JS CLUSTER SUPPORT',
-    '» EXIT'
-  ]
+    '» EXIT',
+  ],
 });
 
 var homeTitle = blessed.text({
@@ -33,7 +33,7 @@ var homeTitle = blessed.text({
   align: 'center',
   fg: 'blue',
   bg: 'white',
-  content: 'Hackathon Starter (c) 2014'
+  content: 'Hackathon Starter (c) 2014',
 });
 
 var footer = blessed.text({
@@ -42,7 +42,8 @@ var footer = blessed.text({
   fg: 'white',
   bg: 'blue',
   tags: true,
-  content: ' {cyan-fg}<Up/Down>{/cyan-fg} moves | {cyan-fg}<Enter>{/cyan-fg} selects | {cyan-fg}<q>{/cyan-fg} exits'
+  content:
+    ' {cyan-fg}<Up/Down>{/cyan-fg} moves | {cyan-fg}<Enter>{/cyan-fg} selects | {cyan-fg}<q>{/cyan-fg} exits',
 });
 
 var inner = blessed.form({
@@ -55,10 +56,10 @@ var inner = blessed.form({
   border: {
     type: 'line',
     fg: 'white',
-    bg: 'red'
+    bg: 'red',
   },
   fg: 'white',
-  bg: 'red'
+  bg: 'red',
 });
 
 var success = blessed.box({
@@ -72,14 +73,14 @@ var success = blessed.box({
   border: {
     type: 'line',
     fg: 'white',
-    bg: 'green'
+    bg: 'green',
   },
   fg: 'white',
   bg: 'green',
-  padding: 1
+  padding: 1,
 });
 
-success.on('keypress', function() {
+success.on('keypress', function () {
   home.focus();
   home.remove(success);
 });
@@ -89,9 +90,9 @@ var clusterText = blessed.text({
   bg: 'red',
   fg: 'white',
   tags: true,
-  content: 'Take advantage of multi-core systems using built-in {underline}cluster{/underline} module.'
+  content:
+    'Take advantage of multi-core systems using built-in {underline}cluster{/underline} module.',
 });
-
 
 var enable = blessed.button({
   parent: inner,
@@ -103,18 +104,17 @@ var enable = blessed.button({
   border: {
     type: 'line',
     fg: 'white',
-    bg: 'red'
+    bg: 'red',
   },
   style: {
     fg: 'white',
     bg: 'red',
     focus: {
       fg: 'red',
-      bg: 'white'
-    }
-  }
+      bg: 'white',
+    },
+  },
 });
-
 
 var disable = blessed.button({
   parent: inner,
@@ -127,16 +127,16 @@ var disable = blessed.button({
   border: {
     type: 'line',
     fg: 'white',
-    bg: 'red'
+    bg: 'red',
   },
   style: {
     fg: 'white',
     bg: 'red',
     focus: {
       fg: 'red',
-      bg: 'white'
-    }
-  }
+      bg: 'white',
+    },
+  },
 });
 
 var cancel = blessed.button({
@@ -150,23 +150,22 @@ var cancel = blessed.button({
   border: {
     type: 'line',
     fg: 'white',
-    bg: 'red'
+    bg: 'red',
   },
   style: {
     fg: 'white',
     bg: 'red',
     focus: {
       fg: 'red',
-      bg: 'white'
-    }
-  }
+      bg: 'white',
+    },
+  },
 });
 
-cancel.on('press', function() {
+cancel.on('press', function () {
   home.focus();
   home.remove(inner);
   screen.render();
-
 });
 
 var authForm = blessed.form({
@@ -174,42 +173,62 @@ var authForm = blessed.form({
   keys: true,
   fg: 'white',
   bg: 'blue',
-  padding: { left: 1, right: 1 }
+  padding: { left: 1, right: 1 },
 });
 
-authForm.on('submit', function() {
-  var passportConfig = fs.readFileSync('config/passport.js').toString().split(os.EOL);
-  var loginTemplate = fs.readFileSync('views/account/login.jade').toString().split(os.EOL);
-  var profileTemplate = fs.readFileSync('views/account/profile.jade').toString().split(os.EOL);
+authForm.on('submit', function () {
+  var passportConfig = fs
+    .readFileSync('config/passport.js')
+    .toString()
+    .split(os.EOL);
+  var loginTemplate = fs
+    .readFileSync('views/account/login.jade')
+    .toString()
+    .split(os.EOL);
+  var profileTemplate = fs
+    .readFileSync('views/account/profile.jade')
+    .toString()
+    .split(os.EOL);
   var userModel = fs.readFileSync('models/User.js').toString().split(os.EOL);
   var app = fs.readFileSync('app.js').toString().split(os.EOL);
   var secrets = fs.readFileSync('config/secrets.js').toString().split(os.EOL);
 
-  var index = passportConfig.indexOf("var FacebookStrategy = require('passport-facebook').Strategy;");
+  var index = passportConfig.indexOf(
+    "var FacebookStrategy = require('passport-facebook').Strategy;"
+  );
   if (facebookCheckbox.checked && index !== -1) {
     passportConfig.splice(index, 1);
     index = passportConfig.indexOf('// Sign in with Facebook.');
     passportConfig.splice(index, 47);
     fs.writeFileSync('config/passport.js', passportConfig.join(os.EOL));
 
-    index = loginTemplate.indexOf("      a.btn.btn-block.btn-facebook.btn-social(href='/auth/facebook')");
+    index = loginTemplate.indexOf(
+      "      a.btn.btn-block.btn-facebook.btn-social(href='/auth/facebook')"
+    );
     loginTemplate.splice(index, 3);
     fs.writeFileSync('views/account/login.jade', loginTemplate.join(os.EOL));
 
-    index = profileTemplate.indexOf("  if user.facebook");
+    index = profileTemplate.indexOf('  if user.facebook');
     profileTemplate.splice(index - 1, 5);
-    fs.writeFileSync('views/account/profile.jade', profileTemplate.join(os.EOL));
+    fs.writeFileSync(
+      'views/account/profile.jade',
+      profileTemplate.join(os.EOL)
+    );
 
     index = userModel.indexOf('  facebook: String,');
     userModel.splice(index, 1);
     fs.writeFileSync('models/User.js', userModel.join(os.EOL));
 
-    index = app.indexOf("app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email', 'user_location'] }));");
+    index = app.indexOf(
+      "app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email', 'user_location'] }));"
+    );
     app.splice(index, 4);
     fs.writeFileSync('app.js', app.join(os.EOL));
   }
 
-  index = passportConfig.indexOf("var GitHubStrategy = require('passport-github').Strategy;");
+  index = passportConfig.indexOf(
+    "var GitHubStrategy = require('passport-github').Strategy;"
+  );
   if (githubCheckbox.checked && index !== -1) {
     console.log(index);
     passportConfig.splice(index, 1);
@@ -217,111 +236,154 @@ authForm.on('submit', function() {
     passportConfig.splice(index, 48);
     fs.writeFileSync('config/passport.js', passportConfig.join(os.EOL));
 
-    index = loginTemplate.indexOf("      a.btn.btn-block.btn-github.btn-social(href='/auth/github')");
+    index = loginTemplate.indexOf(
+      "      a.btn.btn-block.btn-github.btn-social(href='/auth/github')"
+    );
     loginTemplate.splice(index, 3);
     fs.writeFileSync('views/account/login.jade', loginTemplate.join(os.EOL));
 
     index = profileTemplate.indexOf('  if user.github');
     profileTemplate.splice(index - 1, 5);
-    fs.writeFileSync('views/account/profile.jade', profileTemplate.join(os.EOL));
+    fs.writeFileSync(
+      'views/account/profile.jade',
+      profileTemplate.join(os.EOL)
+    );
 
     index = userModel.indexOf('  github: String,');
     userModel.splice(index, 1);
     fs.writeFileSync('models/User.js', userModel.join(os.EOL));
 
-    index = app.indexOf("app.get('/auth/github', passport.authenticate('github'));");
+    index = app.indexOf(
+      "app.get('/auth/github', passport.authenticate('github'));"
+    );
     app.splice(index, 4);
     fs.writeFileSync('app.js', app.join(os.EOL));
   }
 
-  index = passportConfig.indexOf("var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;");
+  index = passportConfig.indexOf(
+    "var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;"
+  );
   if (googleCheckbox.checked && index !== -1) {
     passportConfig.splice(index, 1);
     index = passportConfig.indexOf('// Sign in with Google.');
     passportConfig.splice(index, 46);
     fs.writeFileSync('config/passport.js', passportConfig.join(os.EOL));
 
-    index = loginTemplate.indexOf("      a.btn.btn-block.btn-google-plus.btn-social(href='/auth/google')");
+    index = loginTemplate.indexOf(
+      "      a.btn.btn-block.btn-google-plus.btn-social(href='/auth/google')"
+    );
     loginTemplate.splice(index, 3);
     fs.writeFileSync('views/account/login.jade', loginTemplate.join(os.EOL));
 
     index = profileTemplate.indexOf('  if user.google');
     profileTemplate.splice(index - 1, 5);
-    fs.writeFileSync('views/account/profile.jade', profileTemplate.join(os.EOL));
+    fs.writeFileSync(
+      'views/account/profile.jade',
+      profileTemplate.join(os.EOL)
+    );
 
     index = userModel.indexOf('  google: String,');
     userModel.splice(index, 1);
     fs.writeFileSync('models/User.js', userModel.join(os.EOL));
 
-    index = app.indexOf("app.get('/auth/google', passport.authenticate('google', { scope: 'profile email' }));");
+    index = app.indexOf(
+      "app.get('/auth/google', passport.authenticate('google', { scope: 'profile email' }));"
+    );
     app.splice(index, 4);
     fs.writeFileSync('app.js', app.join(os.EOL));
   }
 
-  index = passportConfig.indexOf("var TwitterStrategy = require('passport-twitter').Strategy;");
+  index = passportConfig.indexOf(
+    "var TwitterStrategy = require('passport-twitter').Strategy;"
+  );
   if (twitterCheckbox.checked && index !== -1) {
     passportConfig.splice(index, 1);
     index = passportConfig.indexOf('// Sign in with Twitter.');
     passportConfig.splice(index, 43);
     fs.writeFileSync('config/passport.js', passportConfig.join(os.EOL));
 
-    index = loginTemplate.indexOf("      a.btn.btn-block.btn-twitter.btn-social(href='/auth/twitter')");
+    index = loginTemplate.indexOf(
+      "      a.btn.btn-block.btn-twitter.btn-social(href='/auth/twitter')"
+    );
     loginTemplate.splice(index, 3);
     fs.writeFileSync('views/account/login.jade', loginTemplate.join(os.EOL));
 
     index = profileTemplate.indexOf('  if user.twitter');
     profileTemplate.splice(index - 1, 5);
-    fs.writeFileSync('views/account/profile.jade', profileTemplate.join(os.EOL));
+    fs.writeFileSync(
+      'views/account/profile.jade',
+      profileTemplate.join(os.EOL)
+    );
 
     index = userModel.indexOf('  twitter: String,');
     userModel.splice(index, 1);
     fs.writeFileSync('models/User.js', userModel.join(os.EOL));
 
-    index = app.indexOf("app.get('/auth/twitter', passport.authenticate('twitter'));");
+    index = app.indexOf(
+      "app.get('/auth/twitter', passport.authenticate('twitter'));"
+    );
     app.splice(index, 4);
     fs.writeFileSync('app.js', app.join(os.EOL));
   }
 
-  index = passportConfig.indexOf("var LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;");
+  index = passportConfig.indexOf(
+    "var LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;"
+  );
   if (linkedinCheckbox.checked && index !== -1) {
     passportConfig.splice(index, 1);
     index = passportConfig.indexOf('// Sign in with LinkedIn.');
     passportConfig.splice(index, 47);
     fs.writeFileSync('config/passport.js', passportConfig.join(os.EOL));
 
-    index = loginTemplate.indexOf("      a.btn.btn-block.btn-linkedin.btn-social(href='/auth/linkedin')");
+    index = loginTemplate.indexOf(
+      "      a.btn.btn-block.btn-linkedin.btn-social(href='/auth/linkedin')"
+    );
     loginTemplate.splice(index, 3);
     fs.writeFileSync('views/account/login.jade', loginTemplate.join(os.EOL));
 
     index = profileTemplate.indexOf('  if user.linkedin');
     profileTemplate.splice(index - 1, 5);
-    fs.writeFileSync('views/account/profile.jade', profileTemplate.join(os.EOL));
+    fs.writeFileSync(
+      'views/account/profile.jade',
+      profileTemplate.join(os.EOL)
+    );
 
     index = userModel.indexOf('  linkedin: String,');
     userModel.splice(index, 1);
     fs.writeFileSync('models/User.js', userModel.join(os.EOL));
 
-    index = app.indexOf("app.get('/auth/linkedin', passport.authenticate('linkedin', { state: 'SOME STATE' }));");
+    index = app.indexOf(
+      "app.get('/auth/linkedin', passport.authenticate('linkedin', { state: 'SOME STATE' }));"
+    );
     app.splice(index, 4);
     fs.writeFileSync('app.js', app.join(os.EOL));
   }
 
-  index = passportConfig.indexOf("var InstagramStrategy = require('passport-instagram').Strategy;");
+  index = passportConfig.indexOf(
+    "var InstagramStrategy = require('passport-instagram').Strategy;"
+  );
   if (instagramCheckbox.checked && index !== -1) {
     passportConfig.splice(index, 1);
     index = passportConfig.indexOf('// Sign in with Instagram.');
     passportConfig.splice(index, 40);
     fs.writeFileSync('config/passport.js', passportConfig.join(os.EOL));
 
-    index = loginTemplate.indexOf("      a.btn.btn-block.btn-instagram.btn-social(href='/auth/instagram')");
+    index = loginTemplate.indexOf(
+      "      a.btn.btn-block.btn-instagram.btn-social(href='/auth/instagram')"
+    );
     loginTemplate.splice(index, 3);
     fs.writeFileSync('views/account/login.jade', loginTemplate.join(os.EOL));
 
     index = profileTemplate.indexOf('  if user.instagram');
     profileTemplate.splice(index - 1, 5);
-    fs.writeFileSync('views/account/profile.jade', profileTemplate.join(os.EOL));
+    fs.writeFileSync(
+      'views/account/profile.jade',
+      profileTemplate.join(os.EOL)
+    );
 
-    index = app.indexOf("app.get('/auth/instagram', passport.authenticate('instagram'));");
+    index = app.indexOf(
+      "app.get('/auth/instagram', passport.authenticate('instagram'));"
+    );
     app.splice(index, 4);
     fs.writeFileSync('app.js', app.join(os.EOL));
 
@@ -331,17 +393,20 @@ authForm.on('submit', function() {
 
   home.remove(authForm);
   home.append(success);
-  success.setContent('Selected authentication providers have been removed from passportConfig.js, User.js, app.js, login.jade and profile.jade!');
+  success.setContent(
+    'Selected authentication providers have been removed from passportConfig.js, User.js, app.js, login.jade and profile.jade!'
+  );
   success.focus();
   screen.render();
 });
 
 var authText = blessed.text({
   parent: authForm,
-  content: 'Selecting a checkbox adds an authentication provider. Unselecting a checkbox removes it. If authentication provider is already present, no action will be taken.',
+  content:
+    'Selecting a checkbox adds an authentication provider. Unselecting a checkbox removes it. If authentication provider is already present, no action will be taken.',
   padding: 1,
   bg: 'magenta',
-  fg: 'white'
+  fg: 'white',
 });
 
 var facebookCheckbox = blessed.checkbox({
@@ -350,7 +415,7 @@ var facebookCheckbox = blessed.checkbox({
   mouse: true,
   fg: 'white',
   bg: 'blue',
-  content: 'Facebook'
+  content: 'Facebook',
 });
 
 var githubCheckbox = blessed.checkbox({
@@ -359,7 +424,7 @@ var githubCheckbox = blessed.checkbox({
   mouse: true,
   fg: 'white',
   bg: 'blue',
-  content: 'GitHub'
+  content: 'GitHub',
 });
 
 var googleCheckbox = blessed.checkbox({
@@ -368,7 +433,7 @@ var googleCheckbox = blessed.checkbox({
   mouse: true,
   fg: 'white',
   bg: 'blue',
-  content: 'Google'
+  content: 'Google',
 });
 
 var twitterCheckbox = blessed.checkbox({
@@ -377,7 +442,7 @@ var twitterCheckbox = blessed.checkbox({
   mouse: true,
   fg: 'white',
   bg: 'blue',
-  content: 'Twitter'
+  content: 'Twitter',
 });
 
 var linkedinCheckbox = blessed.checkbox({
@@ -386,7 +451,7 @@ var linkedinCheckbox = blessed.checkbox({
   mouse: true,
   fg: 'white',
   bg: 'blue',
-  content: 'LinkedIn'
+  content: 'LinkedIn',
 });
 
 var instagramCheckbox = blessed.checkbox({
@@ -395,7 +460,7 @@ var instagramCheckbox = blessed.checkbox({
   mouse: true,
   fg: 'white',
   bg: 'blue',
-  content: 'Instagram'
+  content: 'Instagram',
 });
 
 var authSubmit = blessed.button({
@@ -410,12 +475,12 @@ var authSubmit = blessed.button({
     bg: 'white',
     focus: {
       fg: 'white',
-      bg: 'red'
-    }
-  }
+      bg: 'red',
+    },
+  },
 });
 
-authSubmit.on('press', function() {
+authSubmit.on('press', function () {
   authForm.submit();
 });
 
@@ -432,12 +497,12 @@ var authCancel = blessed.button({
     bg: 'white',
     focus: {
       fg: 'white',
-      bg: 'red'
-    }
-  }
+      bg: 'red',
+    },
+  },
 });
 
-authCancel.on('press', function() {
+authCancel.on('press', function () {
   home.focus();
   home.remove(authForm);
   screen.render();
@@ -448,12 +513,18 @@ var emailForm = blessed.form({
   keys: true,
   fg: 'white',
   bg: 'blue',
-  padding: { left: 1, right: 1 }
+  padding: { left: 1, right: 1 },
 });
 
-emailForm.on('submit', function() {
-  var contactCtrl = fs.readFileSync('controllers/contact.js').toString().split(os.EOL);
-  var userCtrl = fs.readFileSync('controllers/user.js').toString().split(os.EOL);
+emailForm.on('submit', function () {
+  var contactCtrl = fs
+    .readFileSync('controllers/contact.js')
+    .toString()
+    .split(os.EOL);
+  var userCtrl = fs
+    .readFileSync('controllers/user.js')
+    .toString()
+    .split(os.EOL);
   var choice = null;
 
   if (sendgridRadio.checked) {
@@ -464,20 +535,51 @@ emailForm.on('submit', function() {
     choice = 'Mandrill';
   }
 
-  var index = contactCtrl.indexOf('var smtpTransport = nodemailer.createTransport(\'SMTP\', {');
+  var index = contactCtrl.indexOf(
+    "var smtpTransport = nodemailer.createTransport('SMTP', {"
+  );
   contactCtrl.splice(index + 1, 1, "  service: '" + choice + "',");
-  contactCtrl.splice(index + 3, 1, '       user: secrets.' + choice.toLowerCase() +'.user,');
-  contactCtrl.splice(index + 4, 1, '       pass: secrets.' + choice.toLowerCase() + '.password');
+  contactCtrl.splice(
+    index + 3,
+    1,
+    '       user: secrets.' + choice.toLowerCase() + '.user,'
+  );
+  contactCtrl.splice(
+    index + 4,
+    1,
+    '       pass: secrets.' + choice.toLowerCase() + '.password'
+  );
   fs.writeFileSync('controllers/contact.js', contactCtrl.join(os.EOL));
 
-  index = userCtrl.indexOf('      var smtpTransport = nodemailer.createTransport(\'SMTP\', {');
+  index = userCtrl.indexOf(
+    "      var smtpTransport = nodemailer.createTransport('SMTP', {"
+  );
   userCtrl.splice(index + 1, 1, "        service: '" + choice + "',");
-  userCtrl.splice(index + 3, 1, '          user: secrets.' + choice.toLowerCase() + '.user,');
-  userCtrl.splice(index + 4, 1, '          pass: secrets.' + choice.toLowerCase() + '.password');
-  index = userCtrl.indexOf('      var smtpTransport = nodemailer.createTransport(\'SMTP\', {', (index + 1));
+  userCtrl.splice(
+    index + 3,
+    1,
+    '          user: secrets.' + choice.toLowerCase() + '.user,'
+  );
+  userCtrl.splice(
+    index + 4,
+    1,
+    '          pass: secrets.' + choice.toLowerCase() + '.password'
+  );
+  index = userCtrl.indexOf(
+    "      var smtpTransport = nodemailer.createTransport('SMTP', {",
+    index + 1
+  );
   userCtrl.splice(index + 1, 1, "        service: '" + choice + "',");
-  userCtrl.splice(index + 3, 1, '          user: secrets.' + choice.toLowerCase() + '.user,');
-  userCtrl.splice(index + 4, 1, '          pass: secrets.' + choice.toLowerCase() + '.password');
+  userCtrl.splice(
+    index + 3,
+    1,
+    '          user: secrets.' + choice.toLowerCase() + '.user,'
+  );
+  userCtrl.splice(
+    index + 4,
+    1,
+    '          pass: secrets.' + choice.toLowerCase() + '.password'
+  );
   fs.writeFileSync('controllers/user.js', userCtrl.join(os.EOL));
 
   home.remove(emailForm);
@@ -489,11 +591,12 @@ emailForm.on('submit', function() {
 
 var emailText = blessed.text({
   parent: emailForm,
-  content: 'Select one of the following email service providers for {underline}contact form{/underline} and {underline}password reset{/underline}.',
+  content:
+    'Select one of the following email service providers for {underline}contact form{/underline} and {underline}password reset{/underline}.',
   padding: 1,
   bg: 'red',
   fg: 'white',
-  tags: true
+  tags: true,
 });
 
 var sendgridRadio = blessed.radiobutton({
@@ -503,7 +606,7 @@ var sendgridRadio = blessed.radiobutton({
   mouse: true,
   fg: 'white',
   bg: 'blue',
-  content: 'SendGrid'
+  content: 'SendGrid',
 });
 
 var mailgunRadio = blessed.radiobutton({
@@ -512,7 +615,7 @@ var mailgunRadio = blessed.radiobutton({
   mouse: true,
   fg: 'white',
   bg: 'blue',
-  content: 'Mailgun'
+  content: 'Mailgun',
 });
 
 var mandrillRadio = blessed.radiobutton({
@@ -521,7 +624,7 @@ var mandrillRadio = blessed.radiobutton({
   mouse: true,
   fg: 'white',
   bg: 'blue',
-  content: 'Mandrill'
+  content: 'Mandrill',
 });
 
 var emailSubmit = blessed.button({
@@ -536,12 +639,12 @@ var emailSubmit = blessed.button({
     bg: 'white',
     focus: {
       fg: 'white',
-      bg: 'red'
-    }
-  }
+      bg: 'red',
+    },
+  },
 });
 
-emailSubmit.on('press', function() {
+emailSubmit.on('press', function () {
   emailForm.submit();
 });
 
@@ -558,19 +661,18 @@ var emailCancel = blessed.button({
     bg: 'white',
     focus: {
       fg: 'white',
-      bg: 'red'
-    }
-  }
+      bg: 'red',
+    },
+  },
 });
 
-emailCancel.on('press', function() {
+emailCancel.on('press', function () {
   home.focus();
   home.remove(emailForm);
   screen.render();
-
 });
 
-home.on('select', function(child, index) {
+home.on('select', function (child, index) {
   switch (index) {
     case 0:
       home.append(authForm);
@@ -584,7 +686,9 @@ home.on('select', function(child, index) {
     case 2:
       addClusterSupport();
       home.append(success);
-      success.setContent('New file {underline}cluster_app.js{/underline} has been created. Your app is now able to use more than 1 CPU by running {underline}node cluster_app.js{/underline}, which in turn spawns multiple instances of {underline}app.js{/underline}');
+      success.setContent(
+        'New file {underline}cluster_app.js{/underline} has been created. Your app is now able to use more than 1 CPU by running {underline}node cluster_app.js{/underline}, which in turn spawns multiple instances of {underline}app.js{/underline}'
+      );
       success.focus();
       screen.render();
       break;
@@ -595,11 +699,9 @@ home.on('select', function(child, index) {
 
 screen.render();
 
-
 function addClusterSupport() {
-
-  var fileContents = multiline(function() {
-/*
+  var fileContents = multiline(function () {
+    /*
 var os = require('os');
 var cluster = require('cluster');
 

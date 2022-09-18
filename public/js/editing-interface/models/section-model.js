@@ -1,29 +1,32 @@
-
 /*global define */
-define(["backbone", "underscore", "jquery", "editing-interface/collections/section-collection"], function (Backbone, _, $, SectionCollection) {
-
+define([
+  'backbone',
+  'underscore',
+  'jquery',
+  'editing-interface/collections/section-collection',
+], function (Backbone, _, $, SectionCollection) {
   return Backbone.Model.extend({
     defaults: function () {
       return {
-        summary: "",
+        summary: '',
         startWord: null,
-        thumbnail: null
+        thumbnail: null,
       };
     },
 
     initialize: function () {
       var thisModel = this,
-          startWord = thisModel.get("startWord");
+        startWord = thisModel.get('startWord');
       thisModel.switchStartWordListeners(null, startWord);
     },
 
     toJSON: function () {
       var thisModel = this,
-          outp = {};
+        outp = {};
       outp.start = thisModel.getStartTime();
       outp.end = thisModel.getEndTime();
-      outp.summary = thisModel.get("summary");
-      outp.thumbnail = thisModel.get("thumbnail").toJSON();
+      outp.summary = thisModel.get('summary');
+      outp.thumbnail = thisModel.get('thumbnail').toJSON();
       return outp;
     },
 
@@ -32,13 +35,21 @@ define(["backbone", "underscore", "jquery", "editing-interface/collections/secti
 
       // USE STATS
       if (oldWord) {
-        window.vdstats.nSecMoves.push((new Date()).getTime());
+        window.vdstats.nSecMoves.push(new Date().getTime());
       }
 
-      thisModel.set("startWord", newWord);
-      thisModel.listenToOnce(newWord, "change:switchStartWord", thisModel.switchStartWordListeners);
-      thisModel.listenTo(newWord, "change:startSection", thisModel.handleSectionChange);
-      thisModel.listenTo(newWord, "infocus", thisModel.handleGainFocus);
+      thisModel.set('startWord', newWord);
+      thisModel.listenToOnce(
+        newWord,
+        'change:switchStartWord',
+        thisModel.switchStartWordListeners
+      );
+      thisModel.listenTo(
+        newWord,
+        'change:startSection',
+        thisModel.handleSectionChange
+      );
+      thisModel.listenTo(newWord, 'infocus', thisModel.handleGainFocus);
       if (oldWord) {
         thisModel.stopListening(oldWord);
       }
@@ -48,7 +59,8 @@ define(["backbone", "underscore", "jquery", "editing-interface/collections/secti
     },
 
     triggerActiveTime: function (activeTime) {
-      this.get("startWord") && this.get("startWord").trigger("activeTimeChange", activeTime);
+      this.get('startWord') &&
+        this.get('startWord').trigger('activeTimeChange', activeTime);
     },
 
     handleSectionChange: function () {
@@ -58,24 +70,24 @@ define(["backbone", "underscore", "jquery", "editing-interface/collections/secti
 
     handleGainFocus: function () {
       var thisModel = this;
-      thisModel.trigger("gainfocus");
+      thisModel.trigger('gainfocus');
     },
 
     getStartTime: function () {
-      return this.get("startWord").get("start");
+      return this.get('startWord').get('start');
     },
 
     getEndTime: function () {
-      return this.getEndWord().get("end");
+      return this.getEndWord().get('end');
     },
 
     getEndWord: function () {
-      var sw = this.get("startWord"),
-          curWord;
+      var sw = this.get('startWord'),
+        curWord;
       if (sw.next) {
-        curWord = this.get("startWord").next;
+        curWord = this.get('startWord').next;
         while (curWord.next) {
-          if (curWord.get("startSection")) {
+          if (curWord.get('startSection')) {
             break;
           } else {
             curWord = curWord.next;
@@ -85,6 +97,6 @@ define(["backbone", "underscore", "jquery", "editing-interface/collections/secti
         curWord = sw;
       }
       return curWord;
-    }
+    },
   });
 });

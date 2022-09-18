@@ -1,9 +1,6 @@
-
 /*global define */
-define(["backbone", "underscore", "jquery"], function (Backbone, _, $) {
-
+define(['backbone', 'underscore', 'jquery'], function (Backbone, _, $) {
   return Backbone.View.extend({
-
     template: null,
 
     /**
@@ -45,15 +42,18 @@ define(["backbone", "underscore", "jquery"], function (Backbone, _, $) {
       var selectors;
       if (_.isObject(selector)) {
         selectors = selector;
-      }
-      else {
+      } else {
         selectors = {};
         selectors[selector] = view;
       }
       if (!selectors) return;
-      _.each(selectors, function (view, selector) {
-        view.setElement(this.$(selector)).render();
-      }, this);
-    }
+      _.each(
+        selectors,
+        function (view, selector) {
+          view.setElement(this.$(selector)).render();
+        },
+        this
+      );
+    },
   });
 });

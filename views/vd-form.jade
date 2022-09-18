@@ -1,34 +1,49 @@
 .container
-  form.form-horizontal(method='POST', action='/videodigests/newvd', enctype="multipart/form-data")
-    input(type='hidden', name='_csrf', value=_csrf)
-    input#intrmid(type="hidden", name="intrmid")
-    input#yttitle(type="hidden", name="yttitle")
-    .page-header
-      h3 Start a New Video Digest
-    .form-group.yturlgroup
-      label.col-sm-3.control-label(for='yturl') YouTube Video Url
-      .col-sm-7
-        input.form-control#yturl(type='url', name='yturl', placeholder='e.g. https://www.youtube.com/watch?v=usdJgEwMinM', autofocus)
-    .form-group.trangroup
-      label.col-sm-3.control-label(for='tranupload') We do not have a transcript for this video, please upload one:
-      .col-sm-7
-        input.form-control#tranupload(type='file', name='tranupload')
-    .form-group.trangroup
-      label.col-sm-3.control-label(style="margin-top: 1em; margin-left: 0.5em;", for='tranupload') Or instead, check this box to use the auto-generated YouTube transcript:  
-        input(type='checkbox', name='usegtrans', id='usegtrans')
-    .form-group.confirmgroup
-      p.col-sm-9 We must sync the video's audio with the transcript, this will take some time (probably <strong>1-3 hours</strong>). We'll email your account when it is finished.
-      p.col-sm-9 Once finished syncing, you can access the video digest editor at: <a href="", class="finalurl"></a>. Would you still like to create a video digest?
-      .col-sm-7
-        input(type="radio", name="createdigest", value="1")
-        | Yes
-        input(type="radio", name="createdigest", value="0", checked=1)
-        | No
-    .form-group
-      .col-sm-offset-3.col-sm-7
-        button.btn#upload-video-stuff(type='submit') Next
-        img(src="http://192.241.199.43/img/loading.gif", alt="loading", class="loading-gif")
-    .form-group.processinggroup
-      p.col-sm-9 Video digest is currently processing. We will email your account when it is finished. The digest editor will be available at: <a href="", class="finalurl"></a>
-      .col-sm-9
-        img(src="http://192.241.199.43/img/loading.gif", alt="loading", class="loading-gif", style="display: inline-block;")
+  .col-md-offset-2.col-md-8.col-sm-8
+    form(method='POST', action='/newvd', enctype="multipart/form-data")
+      input(type='hidden', name='_csrf', value=_csrf)
+      input#intrmid(type="hidden", name="intrmid")
+      input#formstep(type="hidden", name="step" value="1")
+      input#yttitle(type="hidden", name="yttitle")
+      input#lengthSeconds(type="hidden", name="lengthSeconds")
+      .page-header
+        h3 Start a New Video Digest
+      .form-group.yturlgroup
+        label(for='yturl') YouTube Video Url
+        input.form-control#yturl(type='url', name='yturl', placeholder='e.g. https://www.youtube.com/watch?v=usdJgEwMinM', autofocus)    
+      .trangroup
+        h3 Choose captions
+      .form-group.trangroup
+        .radio#use-manual
+          label
+            input(type='radio', name='trantype' value='manual')
+            | Use existing YouTube captions (manually uploaded)
+        .radio#use-asr
+          label
+            input(type='radio', name='trantype', value='asr')
+            | Use existing YouTube captions (automatic subtitling)
+        .radio
+          label
+            input(type='radio', name='trantype', value='upload')
+            | Upload your own VTT or SRT captions file. Create one using an automatic tool (e.g., <a href="https://www.descript.com" target="_blank">Descript</a>; <a href="https://help.descript.com/hc/en-us/articles/360042211032-Exporting-a-transcript-as-a-document-or-captions-subtitles" target="_blank">how-to</a>) or manual tool (e.g., <a href="https://www.vtt-creator.com" target="_blank">VTT Creator</a>).
+      .uploadtrangroup
+        h3 Upload captions VTT or SRT
+      .form-group.uploadtrangroup
+        label(for="tranupload")
+        input#tranupload(type="file", name="tranupload" accept=".vtt,.srt,text/vtt,text/srt")
+        p.help-block You can create this automatically with <a href="https://www.descript.com" target="_blank">Descript</a> &mdash; see this <a href="https://help.descript.com/hc/en-us/articles/360042211032-Exporting-a-transcript-as-a-document-or-captions-subtitles" target="_blank">how-to</a> &mdash; or using a manual tool like <a href="https://www.vtt-creator.com">VTT Creator.</a>
+      .form-group.confirmgroup
+        p.col-sm-9 We must sync the video's audio with the transcript, this will take some time (probably <strong>1-3 hours</strong>). We'll email your account when it is finished.
+        p.col-sm-9 Once finished syncing, you can access the video digest editor at: <a href="", class="finalurl"></a>. Would you still like to create a video digest?
+        .col-sm-7
+          input(type="radio", name="createdigest", value="1")
+          | Yes
+          input(type="radio", name="createdigest", value="0", checked=1)
+          | No
+      .form-group
+        button.btn.btn-default#upload-video-stuff(type='submit') Next
+        i(class="fas fa-spinner fa-spin loading-gif", alt="loading")
+      .form-group.processinggroup
+        p.col-sm-9 Video digest is currently processing. We will email your account when it is finished. The digest editor will be available at: <a href="", class="finalurl"></a>
+        .col-sm-9
+          i(class="fas fa-spinner fa-spin loading-gif", alt="loading", style="display: inline-block")

@@ -2,9 +2,8 @@ extends layout
 
 block content
   .page-header
-    h3 Video Digests
+    h3 Latest Video Digests
   ul
     - for vd in vds
-      - if (vd.pubdisplay)
-        li
-          a(href="#{vd.puburl}")= vd.digest.title
+      li
+        a(href="/view/#{vd.id}/#{vd.puburl}")= vd.title

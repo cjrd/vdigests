@@ -1,12 +1,31 @@
-
 /*global define */
-define(["backbone", "underscore", "jquery", "editing-interface/models/editor-model", "editing-interface/views/editor-view", "editing-interface/views/output-digest-view", "editing-interface/views/video-form-view", "editing-interface/models/video-form-model", "toastr"], function (Backbone, _, $, EditorModel, EditorView, OutputView, VideoFormView, VideoFormModel, toastr) {
-  "use strict";
+define([
+  'backbone',
+  'underscore',
+  'jquery',
+  'editing-interface/models/editor-model',
+  'editing-interface/views/editor-view',
+  'editing-interface/views/output-digest-view',
+  'editing-interface/views/video-form-view',
+  'editing-interface/models/video-form-model',
+  'toastr',
+], function (
+  Backbone,
+  _,
+  $,
+  EditorModel,
+  EditorView,
+  OutputView,
+  VideoFormView,
+  VideoFormModel,
+  toastr
+) {
+  'use strict';
 
-  var keepWindowSized = function() {
+  var keepWindowSized = function () {
     // keep body size to the size of the viewport
     var $body = $(window.body),
-        $maincon= $("#main-container");
+      $maincon = $('#main-container');
     var setMCHeight = function (inHeight) {
       $maincon.height(inHeight);
     };
@@ -14,7 +33,7 @@ define(["backbone", "underscore", "jquery", "editing-interface/models/editor-mod
       $body.height(inHeight);
     };
     var $window = $(window),
-        navHeight = $(".navbar").eq(0).height();
+      navHeight = $('.navbar').eq(0).height();
 
     $window.resize(function () {
       setMCHeight($window.height() - navHeight);
@@ -22,11 +41,6 @@ define(["backbone", "underscore", "jquery", "editing-interface/models/editor-mod
     });
     setMCHeight($window.height() - navHeight);
     setBodyHeight($window.height());
-    if (!window.onbeforeunload && window.onbeforeunload !== false) {
-      window.onbeforeunload = function () {
-        return "Did you save your video digest?";
-      };
-    }
   };
 
   /**
@@ -34,62 +48,64 @@ define(["backbone", "underscore", "jquery", "editing-interface/models/editor-mod
    */
   return (function () {
     var consts = {
-      editingId: "editing-interface",
-      editingClass: "editing",
-      viewingClass: "viewing",
-      videoFormId: "video-form",
-      pubClass: "published"
+      editingId: 'editing-interface',
+      editingClass: 'editing',
+      viewingClass: 'viewing',
+      videoFormId: 'video-form',
+      pubClass: 'published',
     };
 
     var pvt = {};
 
     pvt.hideAllViews = function () {
-      $("#" + consts.editingId).hide();
-      $("#" + consts.viewingId).hide();
-      $("#" + consts.videoFormId).hide();
+      $('#' + consts.editingId).hide();
+      $('#' + consts.viewingId).hide();
+      $('#' + consts.videoFormId).hide();
     };
 
     return Backbone.Router.extend({
-
       navVideoId: function (vid) {
-        this.navigate("edit/" + vid, {trigger: true, replace: false});
+        this.navigate('edit/' + vid, { trigger: true, replace: false });
       },
 
       routes: {
-        "": "noParams",
-        "edit/:params": "editRoute",
-        "preview/:params": "viewRoute"
+        '': 'noParams',
+        'edit/:params': 'editRoute',
+        'preview/:params': 'viewRoute',
       },
 
       noParams: function () {
         var thisRoute = this,
-            pname = window.location.pathname.split("/").filter(function(str){return str.length;}),
-            $body = thisRoute.$body || $(document.body);
+          pname = window.location.pathname.split('/').filter(function (str) {
+            return str.length;
+          }),
+          $body = thisRoute.$body || $(document.body);
 
         var vtype1 = pname[pname.length - 1],
-            vtype2 = pname[pname.length - 2];
+          vtype2 = pname[pname.length - 2];
         thisRoute.$body = $body;
 
-        if (vtype1 === "editor" || vtype2 === "editor") {
-
+        if (vtype1 === 'editor' || vtype2 === 'editor') {
           keepWindowSized();
           if (!thisRoute.videoFormView) {
-            thisRoute.videoFormView = new VideoFormView({model: new VideoFormModel(), router: thisRoute});
+            thisRoute.videoFormView = new VideoFormView({
+              model: new VideoFormModel(),
+              router: thisRoute,
+            });
             thisRoute.videoFormView.render();
           }
           pvt.hideAllViews();
           thisRoute.videoFormView.$el.show();
-
-        } else if (vtype1 === "view" || vtype2 === "view") {
-          var vtitle = pname[pname.length-1];
+        } else if (pname[0] === 'view') {
           // vd viewing interface TODO the transcript is not needed
-          var IDLEN = 7;
           $(document.body).addClass(consts.pubClass);
-          thisRoute.viewRoute(vtitle.substr(vtitle.length - IDLEN));
-          window.onbeforeunload = false;
-          $("#loading-image").show();
+          const vdid = pname[1];
+          thisRoute.viewRoute(vdid);
+          $('#loading-image').show();
         } else {
-          toastr.error("incorrect URL format, should be /view/title or /editor#edit/id or /editor#preview/id");
+          toastr.error(
+            'incorrect URL format, should be /view/id/title or /editor#edit/id or /editor#preview/id'
+          );
         }
       },
 
@@ -98,7 +114,7 @@ define(["backbone", "underscore", "jquery", "editing-interface/models/editor-mod
        */
       viewRoute: function (dataname) {
         var thisRoute = this,
-            $body = thisRoute.$body || $(document.body);
+          $body = thisRoute.$body || $(document.body);
         thisRoute.$body = $body;
         if (!thisRoute.editorModel) {
           thisRoute.editRoute(dataname, true);
@@ -107,7 +123,7 @@ define(["backbone", "underscore", "jquery", "editing-interface/models/editor-mod
         window.viewing = true;
         window.editing = false;
 
-        $("[data-ph]").attr("contenteditable", false);
+        $('[data-ph]').attr('contenteditable', false);
         $body.removeClass(consts.editingClass);
         $body.addClass(consts.viewingClass);
       },
@@ -118,54 +134,65 @@ define(["backbone", "underscore", "jquery", "editing-interface/models/editor-mod
        */
       editRoute: function (dataname, toView) {
         var thisRoute = this,
-            reloadTrans = true,
-            $body = thisRoute.$body || $(document.body);
+          reloadTrans = true,
+          $body = thisRoute.$body || $(document.body);
         thisRoute.$body = $body;
         // create the editor model which has the trans and digest views
 
         if (!toView) {
-            keepWindowSized();
+          keepWindowSized();
         }
 
         window.dataname = window.dataname || dataname;
 
         var showCallback = function () {
-          thisRoute.$editingView = thisRoute.$editingView || $("#" + consts.editingId);
+          thisRoute.$editingView =
+            thisRoute.$editingView || $('#' + consts.editingId);
           $body.removeClass(consts.viewingClass);
           $body.addClass(consts.editingClass);
           window.viewing = false;
           window.editing = true;
-          $("[data-ph]").attr("contenteditable", true);
+          $('[data-ph]').attr('contenteditable', true);
           pvt.hideAllViews();
           thisRoute.$editingView.show();
         };
 
         if (!thisRoute.editorModel) {
-          thisRoute.editorModel = new EditorModel({id: dataname});
-          thisRoute.editorView =  new EditorView({model: thisRoute.editorModel});
-          thisRoute.editorModel.fetch({success: function (mdl, inobj) {
-            // create the editor view
-            // now  show the editor view
-            $("#" + consts.editingId).html(thisRoute.editorView.render().el);
-            thisRoute.editorModel.postInit();
-            $("#loading-image").hide();
-            if ($(document.body).hasClass(consts.pubClass)) {
-                $("#about").show();
-            }
-            
-            if (toView) {
+          thisRoute.editorModel = new EditorModel({
+            id: dataname,
+            task: toView ? 'view' : 'edit',
+          });
+          thisRoute.editorView = new EditorView({
+            model: thisRoute.editorModel,
+          });
+          thisRoute.editorModel.fetch({
+            success: function (mdl, inobj) {
+              // create the editor view
+              // now  show the editor view
+              $('#' + consts.editingId).html(thisRoute.editorView.render().el);
+              thisRoute.editorModel.postInit();
+              $('#loading-image').hide();
+              if ($(document.body).hasClass(consts.pubClass)) {
+                $('#about').show();
+              }
+
+              if (toView) {
                 thisRoute.viewRoute(dataname);
-            } else {
+              } else {
                 showCallback();
-            }
-          }, error: function (data, resp) {
-              toastr.error((resp.responseJSON && resp.responseJSON.error) || "unable to load the video digest");
-          } // end error
-                                      });
+              }
+            },
+            error: function (data, resp) {
+              toastr.error(
+                (resp.responseJSON && resp.responseJSON.error) ||
+                  'unable to load the video digest'
+              );
+            }, // end error
+          });
         } else {
-            showCallback();
+          showCallback();
         }
-      }
+      },
     });
   })();
 });

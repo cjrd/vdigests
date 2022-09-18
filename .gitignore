@@ -2,13 +2,14 @@
 *.avi
 *.mp4
 *.wav
-secrets.js
-settings.js
 public/content
 ffdata
 node_modules
 builtAssets
 vsbenv
+public/js/main-built*
+public/js/editing-interface/editing-interface/main-built*
+*.sqlite
 
 *~
 .tern-port

@@ -1,24 +1,30 @@
-
 /*global define */
-define(["backbone", "underscore", "jquery", "text!templates/section-template.html"], function (Backbone, _, $, tmpl) {
+define([
+  'backbone',
+  'underscore',
+  'jquery',
+  'text!templates/section-template.html',
+], function (Backbone, _, $, tmpl) {
   var consts = {
-    className: "section-row",
-    keyframeClass: "keyframe-col",
-    thumbClass: "section-thumbnail",
-    takeThumbClass: "take-thumbnail-image",
-    summaryDivClass: "abs-summary",
-    activeClass: "active",
-    secWordClass: "secword",
-    splitDownClass: "split-down",
-    mergeUpClass: "merge-up"
-
+    className: 'section-row',
+    keyframeClass: 'keyframe-col',
+    thumbClass: 'section-thumbnail',
+    takeThumbClass: 'take-thumbnail-image',
+    summaryDivClass: 'abs-summary',
+    activeClass: 'active',
+    secWordClass: 'secword',
+    splitDownClass: 'split-down',
+    mergeUpClass: 'merge-up',
   };
 
   var getSelectedText = function () {
-    var text = "";
-    if (typeof window.getSelection != "undefined") {
+    var text = '';
+    if (typeof window.getSelection != 'undefined') {
       text = window.getSelection().toString();
-    } else if (typeof document.selection != "undefined" && document.selection.type == "Text") {
+    } else if (
+      typeof document.selection != 'undefined' &&
+      document.selection.type == 'Text'
+    ) {
       text = document.selection.createRange().text;
     }
     return text;
@@ -37,13 +43,17 @@ define(["backbone", "underscore", "jquery", "text!templates/section-template.htm
           if (containerEl.nodeType != 1) {
             containerEl = containerEl.parentNode;
           }
-          if (containerEl.nodeName.toLowerCase() == "a") {
+          if (containerEl.nodeName.toLowerCase() == 'a') {
             selectedLinks.push(containerEl);
           } else {
-            links = containerEl.getElementsByTagName("a");
+            links = containerEl.getElementsByTagName('a');
             for (var i = 0; i < links.length; ++i) {
               linkRange.selectNodeContents(links[i]);
-              if (linkRange.compareBoundaryPoints(range.END_TO_START, range) < 1 && linkRange.compareBoundaryPoints(range.START_TO_END, range) > -1) {
+              if (
+                linkRange.compareBoundaryPoints(range.END_TO_START, range) <
+                  1 &&
+                linkRange.compareBoundaryPoints(range.START_TO_END, range) > -1
+              ) {
                 selectedLinks.push(links[i]);
               }
             }
@@ -51,19 +61,22 @@ define(["backbone", "underscore", "jquery", "text!templates/section-template.htm
         }
         linkRange.detach();
       }
-    } else if (document.selection && document.selection.type != "Control") {
+    } else if (document.selection && document.selection.type != 'Control') {
       range = document.selection.createRange();
       containerEl = range.parentElement();
-      if (containerEl.nodeName.toLowerCase() == "a") {
+      if (containerEl.nodeName.toLowerCase() == 'a') {
         selectedLinks.push(containerEl);
       } else {
-        links = containerEl.getElementsByTagName("a");
+        links = containerEl.getElementsByTagName('a');
         linkRange = document.body.createTextRange();
         for (var j = 0; j < links.length; ++j) {
           linkRange.moveToElementText(links[j]);
-          if (linkRange.compareEndPoints("StartToEnd", range) > -1 && linkRange.compareEndPoints("EndToStart", range) < 1) {
+          if (
+            linkRange.compareEndPoints('StartToEnd', range) > -1 &&
+            linkRange.compareEndPoints('EndToStart', range) < 1
+          ) {
             selectedLinks.push(links[j]);
-          } 
+          }
         }
       }
     }
@@ -75,11 +88,15 @@ define(["backbone", "underscore", "jquery", "text!templates/section-template.htm
     if (selectedText) {
       var selLinks = getLinksInSelection();
       if (selLinks.length > 0) {
-        document.execCommand("unlink", false, false);
+        document.execCommand('unlink', false, false);
       } else {
-        var linkUrl = prompt("To what URL should this link go? ");
+        var linkUrl = prompt('To what URL should this link go? ');
         if (linkUrl) {
-          document.execCommand("insertHTML", false, "<a target='_blank' href='" + linkUrl + "'>" + selectedText + "</a>");
+          document.execCommand(
+            'insertHTML',
+            false,
+            "<a target='_blank' href='" + linkUrl + "'>" + selectedText + '</a>'
+          );
         }
       }
     }
@@ -91,35 +108,37 @@ define(["backbone", "underscore", "jquery", "text!templates/section-template.htm
       return this.model.cid;
     },
     className: function () {
-      var retName =  consts.className  + (this.model.get("active") ? " " + consts.activeClass : "");
-      retName += this.model.get("summary").length ? "" : " empty";
+      var retName =
+        consts.className +
+        (this.model.get('active') ? ' ' + consts.activeClass : '');
+      retName += this.model.get('summary').length ? '' : ' empty';
       return retName;
     },
 
     events: {
-      'keyup .abs-summary': "summaryKeyUp",
-      'keydown .abs-summary': "summaryKeyDown",
-      "click .remove-section": "removeSection",
-      "blur .abs-summary": "blurSummary",
-      "focus .abs-summary": "focusSummary",
-      "click" : "clickSection"
+      'keyup .abs-summary': 'summaryKeyUp',
+      'keydown .abs-summary': 'summaryKeyDown',
+      'click .remove-section': 'removeSection',
+      'blur .abs-summary': 'blurSummary',
+      'focus .abs-summary': 'focusSummary',
+      click: 'clickSection',
     },
 
     initialize: function () {
       var thisView = this,
-          thisModel = thisView.model;
+        thisModel = thisView.model;
 
       // listen for thumbnail changes
-      thisView.listenTo(thisModel, "change:thumbnail", function (mdl) {
-        var $img = $("<img>");
+      thisView.listenTo(thisModel, 'change:thumbnail', function (mdl) {
+        var $img = $('<img>');
         $img.addClass(consts.thumbClass);
-        $img.attr("src", mdl.get("thumbnail").get("data"));
-        var $kfel = thisView.$el.find("." + consts.keyframeClass);
+        $img.attr('src', mdl.get('thumbnail').get('data'));
+        var $kfel = thisView.$el.find('.' + consts.keyframeClass);
         $kfel.find('img').remove();
         $kfel.prepend($img);
       });
 
-      thisView.listenTo(thisModel, "change:active", function (chp, val) {
+      thisView.listenTo(thisModel, 'change:active', function (chp, val) {
         if (val) {
           thisView.$el.addClass(consts.activeClass);
         } else {
@@ -127,20 +146,20 @@ define(["backbone", "underscore", "jquery", "text!templates/section-template.htm
         }
       });
 
-      thisView.listenTo(thisModel, "change:summary", function (mdl, val) {
+      thisView.listenTo(thisModel, 'change:summary', function (mdl, val) {
         if (!this.typing) {
-          thisView.$el.find("." + consts.summaryDivClass).html(val);
+          thisView.$el.find('.' + consts.summaryDivClass).html(val);
         }
       });
 
-      thisView.listenTo(thisModel, "gainfocus", function (mdl, val) {
+      thisView.listenTo(thisModel, 'gainfocus', function (mdl, val) {
         window.setTimeout(function () {
           thisView.$el.focus();
         }, 600);
       });
 
       // remove the view if the underlying model is removed
-      thisView.listenTo(thisModel, "remove", function (mdl) {
+      thisView.listenTo(thisModel, 'remove', function (mdl) {
         thisView.remove();
       });
     },
@@ -158,18 +177,18 @@ define(["backbone", "underscore", "jquery", "text!templates/section-template.htm
 
     blurSummary: function () {
       var thisView = this,
-          startWord = thisView.model.get("startWord");
-      thisView.$el.removeClass("focused");
+        startWord = thisView.model.get('startWord');
+      thisView.$el.removeClass('focused');
       thisView.$el.attr('class', _.result(thisView, 'className'));
-      startWord.trigger("unhighlight-section", startWord);
+      startWord.trigger('unhighlight-section', startWord);
     },
 
     focusSummary: function (evt) {
       var thisView = this,
-          startWord = thisView.model.get("startWord");
-      thisView.$el.addClass("focused");
-      startWord.trigger("unhighlight-section", startWord);
-      startWord.trigger("highlight-section", startWord);
+        startWord = thisView.model.get('startWord');
+      thisView.$el.addClass('focused');
+      startWord.trigger('unhighlight-section', startWord);
+      startWord.trigger('highlight-section', startWord);
     },
 
     summaryKeyDown: function (evt) {
@@ -178,62 +197,60 @@ define(["backbone", "underscore", "jquery", "text!templates/section-template.htm
         if (evt.keyCode == 76) {
           // 76 is L (link) -- toggle link
           addTextLink();
-        } 
+        }
       }
     },
 
     summaryKeyUp: function (evt) {
       var thisView = this,
-          curTar = evt.currentTarget,
-          text = curTar.innerHTML;
-      if (text !== thisView.model.get("summary")) {
+        curTar = evt.currentTarget,
+        text = curTar.innerHTML;
+      if (text !== thisView.model.get('summary')) {
         thisView.typing = true;
-        thisView.model.set("summary", text);
+        thisView.model.set('summary', text);
         thisView.typing = false;
         // USE STATS
-        window.vdstats.nSummaryEdits.push((new Date()).getTime());
+        window.vdstats.nSummaryEdits.push(new Date().getTime());
       }
       //this.$el.attr('class', _.result(this, 'className'));
     },
 
     removeSection: function (evt) {
       var thisView = this,
-          thisModel = thisView.model;
+        thisModel = thisView.model;
       // TODO for now, make sure it's not the first section
-      if (window.confirm("Are you sure you want to remove this section?")) {
-        thisModel.get("startWord").set("startSection", false);
-      }
+      thisModel.get('startWord').set('startSection', false);
     },
 
     takeThumbnailImage: function (evt) {
       var thisView = this,
-          thisModel = thisView.model;
-      thisModel.trigger("captureThumbnail", thisModel);
+        thisModel = thisView.model;
+      thisModel.trigger('captureThumbnail', thisModel);
       evt.stopPropagation();
 
       // USE STATS
-      window.vdstats.nKeyFrameChanges.push((new Date()).getTime());
+      window.vdstats.nKeyFrameChanges.push(new Date().getTime());
     },
 
     startVideo: function () {
-      var thisView= this,
-          thisModel = thisView.model;
-      thisModel.trigger("startVideo", thisModel.get("startWord").get("start"));
+      var thisView = this,
+        thisModel = thisView.model;
+      thisModel.trigger('startVideo', thisModel.get('startWord').get('start'));
     },
 
-    mergeSectionUp: function() {
+    mergeSectionUp: function () {
       if (window.transView) {
         var thisView = this,
-            stWord = thisView.model.get("startWord"),
-            pchapModel = stWord.getPrevChapterStart(true);
+          stWord = thisView.model.get('startWord'),
+          pchapModel = stWord.getPrevChapterStart(true);
 
         // TODO have to get chapter start, change it
-        window.vdstats.nChap2Sec.push((new Date()).getTime());
+        window.vdstats.nChap2Sec.push(new Date().getTime());
         window.changingSecChap = true;
 
         // make sure we're not changing the first chapter
         if (pchapModel.getPrevSectionStart()) {
-          pchapModel.set("startChapter", false);
+          pchapModel.set('startChapter', false);
           window.transView.changeStartSection(pchapModel, true);
           // USE STATS
           window.changingSecChap = false;
@@ -243,24 +260,24 @@ define(["backbone", "underscore", "jquery", "text!templates/section-template.htm
         var nxtSecWord = stWord.getNextSectionStart();
         if (nxtSecWord) {
           window.transView.changeStartSection(nxtSecWord, false);
-          nxtSecWord.set("startChapter", true);
+          nxtSecWord.set('startChapter', true);
         }
-
       } else {
-        alert("unable to split chapter -- transcript object did not load correctly. Try saving then reloading.");
+        alert(
+          'unable to split chapter -- transcript object did not load correctly. Try saving then reloading.'
+        );
       }
     },
 
     mergeSectionDown: function () {
       if (window.transView) {
         var thisView = this,
-            stWord = thisView.model.get("startWord"),
-            nchapModel = stWord.getNextChapterStart(true);
-
+          stWord = thisView.model.get('startWord'),
+          nchapModel = stWord.getNextChapterStart(true);
 
         // check that we have a next chapter
         if (nchapModel) {
-          nchapModel.set("startChapter", false);
+          nchapModel.set('startChapter', false);
           window.transView.changeStartSection(nchapModel, true);
         }
 
@@ -268,31 +285,35 @@ define(["backbone", "underscore", "jquery", "text!templates/section-template.htm
         var prevSecWord = stWord.getPrevSectionStart(true);
         if (prevSecWord) {
           window.transView.changeStartSection(prevSecWord, false);
-          prevSecWord.set("startChapter", true);
+          prevSecWord.set('startChapter', true);
         }
-
       } else {
-        alert("unable to split chapter -- transcript object did not load correctly. Try saving then reloading.");
+        alert(
+          'unable to split chapter -- transcript object did not load correctly. Try saving then reloading.'
+        );
       }
     },
 
     clickSection: function (evt) {
       var thisView = this,
-          startWord = thisView.model.get("startWord"),
-          $tar = $(evt.target);
+        startWord = thisView.model.get('startWord'),
+        $tar = $(evt.target);
 
       if ($tar.hasClass(consts.takeThumbClass)) {
         thisView.takeThumbnailImage(evt);
-      } else if ($tar.hasClass(consts.thumbClass) || (window.viewing && !$tar.attr("href"))) {
+      } else if (
+        $tar.hasClass(consts.thumbClass) ||
+        (window.viewing && !$tar.attr('href'))
+      ) {
         thisView.startVideo();
       } else if ($tar.hasClass(consts.splitDownClass)) {
         thisView.mergeSectionDown();
       } else if ($tar.hasClass(consts.mergeUpClass)) {
         thisView.mergeSectionUp();
       } else {
-        startWord.trigger("focus", startWord);
-        thisView.$el.find("." + consts.summaryDivClass).focus();
+        startWord.trigger('focus', startWord);
+        thisView.$el.find('.' + consts.summaryDivClass).focus();
       }
-    }
+    },
   });
 });

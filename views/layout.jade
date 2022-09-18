@@ -7,14 +7,15 @@ html
     meta(name='csrf-token', content=_csrf)
     meta(name='author', content='Colorado Reed')
     title #{title} | Video Digest
-    link(href='http://fonts.googleapis.com/css?family=Cabin+Condensed',rel='stylesheet', type='text/css')
+    link(href='https://fonts.googleapis.com/css?family=Cabin+Condensed',rel='stylesheet', type='text/css')
+    script(src='https://kit.fontawesome.com/39472cd146.js',crossorigin='anonymous')
     != css('base')
     block morecss
   body
+    block modal
     block bodycontent
       block navbar
-        if user
-          include partials/navigation
+        include partials/navigation
 
       #main-container.container
         include partials/flash
@@ -30,7 +31,7 @@ html
           | in their  
           a(href="http://vis.berkeley.edu/papers/videodigests/") UIST 2014 publication
           |, and you can view more video digests at  
-          a(href="http://vis.berkeley.edu/videodigests") http://vis.berkeley.edu/videodigests
+          a(href="https://www.videodigests.com") videodigests.com
           |. 
 
 
